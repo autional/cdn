@@ -1,0 +1,154 @@
+{
+  "$note": "CDN 资产清单。sha384 用于 <link>/<script> 的 integrity 属性与 SRI 校验。路径一律不可变：内容变了必须换版本号。",
+  "generatedAt": "2026-10-03T02:16:17.184Z",
+  "version": "0.1.0-rc.0b744955",
+  "base": "/ui/v0.1.0-rc.0b744955",
+  "origin": "https://cdn.autional.cn",
+  "generatedFrom": "autional-cn/ui",
+  "files": [
+    {
+      "destRel": "fonts/LICENSE-Inter-OFL.txt",
+      "bytes": 4477,
+      "sha384": "sha384-kj3ws+qnzjazxsLTzPAVaXquIFuyNRYVaSXX024NG79Z2vDskAWFDhnsJYazAo0C",
+      "path": "/ui/v0.1.0-rc.0b744955/fonts/LICENSE-Inter-OFL.txt"
+    },
+    {
+      "destRel": "fonts/inter-latin-wght-normal.woff2",
+      "bytes": 48256,
+      "sha384": "sha384-l0ql7Q1zqvX5klAVRwYjcMVCkCxg5dMTdghsIlC3pYkX6wwEHerh2bP/4yAao3Im",
+      "path": "/ui/v0.1.0-rc.0b744955/fonts/inter-latin-wght-normal.woff2"
+    },
+    {
+      "destRel": "icons/android-chrome-192x192.png",
+      "bytes": 24256,
+      "sha384": "sha384-71UVY6vd9I/q1cRjICd0GyEkD6Xd5bwiPrqOwxPWhs11EMUGsa5+4ubE3ZO3pjoo",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/android-chrome-192x192.png"
+    },
+    {
+      "destRel": "icons/android-chrome-512x512.png",
+      "bytes": 144926,
+      "sha384": "sha384-DrHvFQm3BSpHyRgDM9b0tvDxz+Zrz9OEXX1rbpyAJJ5OlV6s7t6TlcSKDP7jToRc",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/android-chrome-512x512.png"
+    },
+    {
+      "destRel": "icons/apple-touch-icon.png",
+      "bytes": 22046,
+      "sha384": "sha384-u5+xObVucWrYwRpt9FVG8btRu81jzN92cmPGfIDspllT5utp7nuNqLjsvSrXOlKH",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/apple-touch-icon.png"
+    },
+    {
+      "destRel": "icons/favicon-16x16.png",
+      "bytes": 631,
+      "sha384": "sha384-GNeju8SO9OHxbDNzENEfJ8GRZd+oWlmG6G2dc9wmjHkP0LP8SJEel5bMKzk8Amvw",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-16x16.png"
+    },
+    {
+      "destRel": "icons/favicon-32x32.png",
+      "bytes": 1493,
+      "sha384": "sha384-BBeLlGkDWnKfmvdxMUhnZ44wWkhCIjLp3Vl8sdAUV/enCFftL69EAZYGQ8v0Us3x",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-32x32.png"
+    },
+    {
+      "destRel": "icons/favicon-48x48.png",
+      "bytes": 1685,
+      "sha384": "sha384-UWjLdmR0hTxOzD04t6Rqd3ThYan4yvHRAYm1j7V8I6/h4BU3tMs6qR9OBKd+DAC6",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-48x48.png"
+    },
+    {
+      "destRel": "icons/favicon-dark.svg",
+      "bytes": 4033,
+      "sha384": "sha384-GZN0NUYujw++hUi3GGZAydhfEiG5+H6ljvxoDMTGFSfCoNWJhkBT/KM+MGo9HtU1",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-dark.svg"
+    },
+    {
+      "destRel": "icons/favicon-light.svg",
+      "bytes": 4033,
+      "sha384": "sha384-yThbq035Ys4Xih5lLDxl6ZcA2c02jyUrjBKXausbmvZpY2TJnpF5iNbBNZDwtAry",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-light.svg"
+    },
+    {
+      "destRel": "icons/favicon-mono-black.svg",
+      "bytes": 3943,
+      "sha384": "sha384-PvWUfR4dCN6ufEkPijNmMm9R82PQx/QC4PNhyBms0hcTCvQ94K3AqAUONkYNbM67",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-mono-black.svg"
+    },
+    {
+      "destRel": "icons/favicon-mono-white.svg",
+      "bytes": 3943,
+      "sha384": "sha384-+cvvAySvG+oQptf2GkFhQBr9SjovjJxGzcRm6vM1+BPxHL5XkMZNsYa4hi2rFI4p",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon-mono-white.svg"
+    },
+    {
+      "destRel": "icons/favicon.ico",
+      "bytes": 15406,
+      "sha384": "sha384-ajpHZdOiYud2PDGbFflePQ68p+vqtKuSmUoU9XareDA4B/VxnUXur67TTRhsYkmC",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon.ico"
+    },
+    {
+      "destRel": "icons/favicon.svg",
+      "bytes": 3989,
+      "sha384": "sha384-VedqBLa1rjLF/Nyk907sXqBvk1xS+eu1kNpZnEKKw3/QHWpW1qtU8HdAt3UzJybw",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/favicon.svg"
+    },
+    {
+      "destRel": "icons/site.webmanifest",
+      "bytes": 450,
+      "sha384": "sha384-fNNNieral2VVwOsViPQvi+IcNyqchsa4cUarTkSMwamb37w3PUD9mnWAGt+hje80",
+      "path": "/ui/v0.1.0-rc.0b744955/icons/site.webmanifest"
+    },
+    {
+      "destRel": "logo/logo-mark.color.svg",
+      "bytes": 3952,
+      "sha384": "sha384-jsXq2Z+su7odo7EarpOjIte6RVkO+/8/cefb84oMUuPowxEQ8i8yIoAnubLs1YAs",
+      "path": "/ui/v0.1.0-rc.0b744955/logo/logo-mark.color.svg"
+    },
+    {
+      "destRel": "logo/logo-mark.dark.svg",
+      "bytes": 3952,
+      "sha384": "sha384-uT9wFl9lUk/QsEyifrZOI7CZ+CgkrLflHtQxKg1RPazsu3t0t7TuVdp6jWBICkkk",
+      "path": "/ui/v0.1.0-rc.0b744955/logo/logo-mark.dark.svg"
+    },
+    {
+      "destRel": "logo/logo-mark.mono-black.svg",
+      "bytes": 3862,
+      "sha384": "sha384-+kwMW70owk+rXOn88++KXEYel68zonOCOwghhaKAtoYpBFI4BBCk/j+1O4o9PTZZ",
+      "path": "/ui/v0.1.0-rc.0b744955/logo/logo-mark.mono-black.svg"
+    },
+    {
+      "destRel": "logo/logo-mark.mono-white.svg",
+      "bytes": 3862,
+      "sha384": "sha384-CidygiCSBbmMVFbxWk9ljoBrqaVgwCTRgCDL6FHFtgeOpjwDEH1NyaL3k1azsZPN",
+      "path": "/ui/v0.1.0-rc.0b744955/logo/logo-mark.mono-white.svg"
+    },
+    {
+      "destRel": "logo/logo-mark.svg",
+      "bytes": 3952,
+      "sha384": "sha384-o3IGktoxlyHDkiyoTNo9GVDmf+3XekToSN+zbCPYuHeHFFwHuNSri/2marQaBnKG",
+      "path": "/ui/v0.1.0-rc.0b744955/logo/logo-mark.svg"
+    },
+    {
+      "destRel": "primitives.css",
+      "bytes": 17717,
+      "sha384": "sha384-cdcb/b2btTPe+lWN7AW9QMP/99ob5C470FG0HpL4eCqge2LCOtOjN9sAPiGV5iNv",
+      "path": "/ui/v0.1.0-rc.0b744955/primitives.css"
+    },
+    {
+      "destRel": "profiles/developer.css",
+      "bytes": 1395,
+      "sha384": "sha384-cQZXZQepvBw65IAAOPFmuKfpJrC80oMxgUn+EM6Ax2OS1mc7ahJDttxxW/H+A5/R",
+      "path": "/ui/v0.1.0-rc.0b744955/profiles/developer.css"
+    },
+    {
+      "destRel": "profiles/docs.css",
+      "bytes": 1390,
+      "sha384": "sha384-1XPdGMwfw8p11Rq78MlYkoZKexTRSSAevIkkAFcSUplEqeUDGKY0XQvryaybkTkJ",
+      "path": "/ui/v0.1.0-rc.0b744955/profiles/docs.css"
+    },
+    {
+      "destRel": "tokens.css",
+      "bytes": 11901,
+      "sha384": "sha384-VOxJs2l0a/btelCuhItmHH9qI2m+6pAbQCB2iciImeAq2UjgM4gkZoxrPb41H4U2",
+      "path": "/ui/v0.1.0-rc.0b744955/tokens.css"
+    }
+  ]
+}
