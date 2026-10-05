@@ -11,21 +11,18 @@
     },
     {
       "source": "/ui/:version/:path*",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "headers": [ { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" } ]
     },
     {
       "source": "/ai/:version/:path*",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "headers": [ { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" } ]
     },
     {
       "source": "/ai/latest.json",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300" }
-      ]
+      "headers": [ { "key": "Cache-Control", "value": "public, max-age=300" } ]
     }
+  ],
+  "rewrites": [
+    { "source": "/ai/latest/:path*", "destination": "/ai/v0.1.0-53003a10/:path*" }
   ]
 }
