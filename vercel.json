@@ -23,6 +23,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/ai/latest/:path*", "destination": "/ai/v0.1.0-53003a10/:path*" }
+    { "source": "/ai/latest/:path*", "destination": "/ai/v0.1.0-f9c494f7/:path*" }
   ]
 }
