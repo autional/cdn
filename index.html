@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Autional CDN</title>
+<style>
+body{font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#1e293b}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:32px 0 8px;border-bottom:1px solid #e2e8f0;padding-bottom:6px}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+pre{background:#f7fafd;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;overflow-x:auto}
+a{color:#004565}.warn{background:#fffcf0;border:1px solid #ffefb3;border-radius:6px;padding:10px 12px;margin:16px 0}
+</style></head><body>
+<h1>Autional CDN (.com)</h1>
+<p>Versioned, immutable static assets for <code>autional.com</code>. Runtime assets only &mdash; build-time code goes through npm.</p>
+<div class="warn"><strong>Paths are immutable.</strong> When content changes, publish a new version directory; files under a version path are cached forever. Read <a href="/ai/latest.json"><code>/ai/latest.json</code></a> (short TTL) to follow the latest.</div>
+<h2>Layout</h2>
+<pre><code>/ai/&lt;version&gt;/…    # AI skill distribution (text/markdown, plus .sha256)
+/ui/&lt;version&gt;/…    # design-system runtime assets (CSS / icons / fonts)</code></pre>
+<p>Own domain: <code>https://cdn.autional.com</code>.</p>
+</body></html>

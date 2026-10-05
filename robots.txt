@@ -1,0 +1,3 @@
+# cdn.autional.com — Autional CDN (.com): versioned, immutable static assets. Index page is noindex.
+User-agent: *
+Allow: /
