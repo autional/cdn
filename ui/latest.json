@@ -1,5 +1,5 @@
 {
   "$note": "当前版本指针。TTL 短（300s），因为它是可变的；所有 v<version>/ 下的路径才是不可变的。",
-  "version": "0.1.0-rc.de498ca0",
-  "base": "/ui/v0.1.0-rc.de498ca0"
+  "version": "0.1.0-rc.5ee19b4f",
+  "base": "/ui/v0.1.0-rc.5ee19b4f"
 }
