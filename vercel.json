@@ -4,25 +4,102 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Timing-Allow-Origin", "value": "*" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Timing-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
       ]
     },
     {
       "source": "/ui/:version/:path*",
-      "headers": [ { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" } ]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/demo/:version/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/ui/latest.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        }
+      ]
     },
     {
       "source": "/ai/:version/:path*",
-      "headers": [ { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" } ]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
       "source": "/ai/latest.json",
-      "headers": [ { "key": "Cache-Control", "value": "public, max-age=300" } ]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300"
+        }
+      ]
     }
   ],
   "rewrites": [
-    { "source": "/ai/latest/:path*", "destination": "/ai/v0.1.0-da036107/:path*" }
+    {
+      "source": "/ai/latest.json",
+      "has": [
+        { "type": "host", "value": "cdn.autional.cn" }
+      ],
+      "destination": "/ai/latest.cn.json"
+    },
+    {
+      "source": "/ai/latest.json",
+      "has": [
+        { "type": "host", "value": "cn-cdn.vercel.app" }
+      ],
+      "destination": "/ai/latest.cn.json"
+    },
+    {
+      "source": "/ai/latest.json",
+      "destination": "/ai/latest.com.json"
+    },
+    {
+      "source": "/ai/latest/:path*",
+      "has": [
+        { "type": "host", "value": "cdn.autional.cn" }
+      ],
+      "destination": "/ai/v0.1.0-7234c299/:path*"
+    },
+    {
+      "source": "/ai/latest/:path*",
+      "has": [
+        { "type": "host", "value": "cn-cdn.vercel.app" }
+      ],
+      "destination": "/ai/v0.1.0-7234c299/:path*"
+    },
+    {
+      "source": "/ai/latest/:path*",
+      "destination": "/ai/v0.1.0-da036107/:path*"
+    }
   ]
 }

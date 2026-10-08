@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Autional Service Lab · 深色面板组件变体（ui-demo/demokit/brand-dark.css）
+   --------------------------------------------------------------------------
+   用途：`brand.css` 里的通用数据展示组件（.dk-note/.dk-table/.dk-token-box/
+   .dk-badge/.dk-kv/.dk-overview/.task/.btn.danger）是 **light 优先** 的；
+   若页面使用深色面板（`.dk-app .panel` 不带 `.light`），额外引入本文件即可。
+
+   引入方式（业务页 <head>，brand.css 之后）：
+     <link rel="stylesheet" href="https://cdn.autional.cn/demo/v1.8.0/brand-dark.css">
+
+   约定：
+   - 作用域一律 `.dk-app .panel:not(.light)`，不影响 light 面板；
+   - 只做「面/边/文本」覆盖，几何与排版复用 brand.css；
+   - 复用既有 token（--dev-surface/--primary-200/--text-inverse/--error/--success/
+     --warning），不新造色值；动效仍走 --motion-*。
+   ========================================================================== */
+
+/* ── token 重声明：soft/border 在深色底用 alpha 组合 ── */
+.dk-app .panel:not(.light) {
+  --success-soft: rgba(82, 196, 26, 0.14);
+  --success-border: rgba(82, 196, 26, 0.38);
+  --error-soft: rgba(255, 77, 79, 0.14);
+  --error-border: rgba(255, 77, 79, 0.40);
+  --error-strong: #ff9a9b;
+  --warning-soft: rgba(250, 173, 20, 0.14);
+  --warning-border: rgba(250, 173, 20, 0.40);
+}
+
+/* ── 提示框 ── */
+.dk-app .panel:not(.light) .dk-note,
+.dk-app .panel:not(.light) .note-ok,
+.dk-app .panel:not(.light) .note-danger,
+.dk-app .panel:not(.light) .note-err {
+  color: var(--text-inverse);
+}
+
+/* ── 小数据表 ── */
+.dk-app .panel:not(.light) .dk-table th,
+.dk-app .panel:not(.light) .mini-table th {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--primary-200);
+}
+.dk-app .panel:not(.light) .dk-table th,
+.dk-app .panel:not(.light) .dk-table td,
+.dk-app .panel:not(.light) .mini-table th,
+.dk-app .panel:not(.light) .mini-table td {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dk-app .panel:not(.light) .dk-table td,
+.dk-app .panel:not(.light) .mini-table td { color: var(--text-inverse); }
+.dk-app .panel:not(.light) .dk-table tbody tr:hover td,
+.dk-app .panel:not(.light) .mini-table tbody tr:hover td { background: rgba(255, 255, 255, 0.05); }
+.dk-app .panel:not(.light) .verdict-pass { color: var(--text-inverse); }
+.dk-app .panel:not(.light) .verdict-fail { color: var(--error-strong); }
+
+/* ── token / 长文本展示盒 ── */
+.dk-app .panel:not(.light) .dk-token-box,
+.dk-app .panel:not(.light) .token-box {
+  background: var(--dev-surface);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--primary-200);
+}
+
+/* ── 徽章 ── */
+.dk-app .panel:not(.light) .dk-badge.pass,
+.dk-app .panel:not(.light) .badge.pass { color: var(--text-inverse); }
+.dk-app .panel:not(.light) .dk-badge.rehash,
+.dk-app .panel:not(.light) .badge.rehash { color: var(--text-inverse); }
+
+/* ── 键值表 / 概览条 / 统计块 / 流程 ── */
+.dk-app .panel:not(.light) .dk-kv,
+.dk-app .panel:not(.light) .kv { color: var(--text-inverse); border-bottom-color: rgba(255, 255, 255, 0.10); }
+.dk-app .panel:not(.light) .dk-kv b,
+.dk-app .panel:not(.light) .kv b { color: var(--primary-200); }
+
+.dk-app .panel:not(.light) .dk-overview,
+.dk-app .panel:not(.light) .overview,
+.dk-app .panel:not(.light) .dk-flow .step,
+.dk-app .panel:not(.light) .flow .step,
+.dk-app .panel:not(.light) .dk-stat-box,
+.dk-app .panel:not(.light) .stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dk-app .panel:not(.light) .dk-overview .overall,
+.dk-app .panel:not(.light) .overview .overall,
+.dk-app .panel:not(.light) .dk-flow .step-name,
+.dk-app .panel:not(.light) .flow .step-name { color: var(--text-inverse); }
+.dk-app .panel:not(.light) .dk-overview .detail,
+.dk-app .panel:not(.light) .overview .detail,
+.dk-app .panel:not(.light) .dk-overview .stat .num,
+.dk-app .panel:not(.light) .overview .stat .num,
+.dk-app .panel:not(.light) .dk-stat-box .num,
+.dk-app .panel:not(.light) .stat-box .num { color: var(--primary-200); }
+
+/* ── 任务/调度器列表 ── */
+.dk-app .panel:not(.light) .task {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dk-app .panel:not(.light) .task .tname { color: var(--text-inverse); }
+.dk-app .panel:not(.light) .task .tmeta { color: rgba(248, 250, 252, 0.55); }
+.dk-app .panel:not(.light) .task .tenabled,
+.dk-app .panel:not(.light) .task .tdisabled {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-inverse);
+}
+
+/* ── 危险按钮 ── */
+.dk-app .panel:not(.light) .btn.danger {
+  background: rgba(255, 77, 79, 0.12);
+  border-color: var(--error);
+  color: var(--error-strong);
+}
+.dk-app .panel:not(.light) .btn.danger:hover { background: var(--error); color: var(--text-inverse); }

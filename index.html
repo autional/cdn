@@ -1,20 +1,64 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Autional CDN</title>
+<title>Autional CDN — 设计系统运行期资产</title>
 <style>
 body{font:14px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#1e293b}
 h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:32px 0 8px;border-bottom:1px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:14px;margin:18px 0 6px;color:#334155}
 code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
 pre{background:#f7fafd;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;overflow-x:auto}
-a{color:#004565}.warn{background:#fffcf0;border:1px solid #ffefb3;border-radius:6px;padding:10px 12px;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid #eef2f6}
+.n,.h{text-align:right;color:#64748b;font-family:ui-monospace,monospace;font-size:12px}
+a{color:#004565}
+.warn{background:#fffcf0;border:1px solid #ffefb3;border-radius:6px;padding:10px 12px;margin:16px 0}
 </style></head><body>
-<h1>Autional CDN (.com)</h1>
-<p>Versioned, immutable static assets for <code>autional.com</code>. Runtime assets only &mdash; build-time code goes through npm.</p>
-<div class="warn"><strong>Paths are immutable.</strong> When content changes, publish a new version directory; files under a version path are cached forever. Read <a href="/ai/latest.json"><code>/ai/latest.json</code></a> (short TTL) to follow the latest.</div>
-<h2>Layout</h2>
-<pre><code>/ai/&lt;version&gt;/…    # AI skill distribution (text/markdown, plus .sha256)
-/ui/&lt;version&gt;/…    # design-system runtime assets (CSS / icons / fonts)</code></pre>
-<p>Own domain: <code>https://cdn.autional.com</code>.</p>
+<h1>Autional CDN</h1>
+<p>设计系统的<strong>运行期资产</strong>。构建期代码（令牌 JS、Tailwind preset、antd 主题桥、React 组件）请走 npm，不要走这里。</p>
+<div class="warn"><strong>路径不可变。</strong>内容一旦变化就换版本号——<code>/ui/v0.1.0-rc.f0db1b97/</code> 下的文件永久缓存，不保证会被刷新。需要跟随最新版时读 <a href="/ui/latest.json"><code>/ui/latest.json</code></a>（短 TTL）。</div>
+<p>当前版本 <strong>0.1.0-rc.f0db1b97</strong> · 共 24 个文件</p>
+<h2>接入片段</h2>
+<h3>预编译令牌 CSS（Go demo / 任何非 Node 构建的消费方）</h3><pre><code>&lt;link rel="stylesheet" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/tokens.css"></code></pre>
+<h3>字体：**不要 preload**。tokens.css 里的 @font-face 已经引用它，浏览器自己会取。</h3><pre><code>/* 实测（2026-09）：给 9 个 SPA 站点加这条 preload 后，admin-console 的视觉回归从
+   基线 1063px / 0.082% 变成 5412px / 0.418%（SSIM 0.9791），重跑三次逐位相同——
+   是确定性差异，不是网络抖动。它换不来可证明的收益，所以不写进接入片段。 */</code></pre>
+<h3>站点图标套件（5 条 link，含 32x32 与 apple-touch）</h3><pre><code>&lt;link rel="icon" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/favicon.ico" sizes="any">
+&lt;link rel="icon" type="image/png" sizes="32x32" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/favicon-32x32.png">
+&lt;link rel="icon" type="image/png" sizes="16x16" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/favicon-16x16.png">
+&lt;link rel="apple-touch-icon" sizes="180x180" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/apple-touch-icon.png">
+&lt;link rel="icon" type="image/svg+xml" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/favicon.svg">
+&lt;link rel="manifest" href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/icons/site.webmanifest"></code></pre>
+<h3>构建期代码（Node / Vite / Astro）—— 走 npm，不要走 CDN</h3><pre><code>pnpm add @autional/tokens @autional/tailwind-preset
+import '@autional/tokens/tokens.css'</code></pre>
+<h2>清单</h2>
+<p><a href="https://cdn.autional.cn/ui/v0.1.0-rc.f0db1b97/manifest.json">manifest.json</a> — 每个文件的字节数与 sha384，可用于 SRI 与完整性校验。</p>
+<table><thead><tr><th>路径</th><th class="n">字节</th><th class="h">sha384</th></tr></thead><tbody>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/fonts/LICENSE-Inter-OFL.txt">fonts/LICENSE-Inter-OFL.txt</a></td><td class="n">4477</td><td class="h">sha384-kj3ws+qnzjazxsL…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/fonts/inter-latin-wght-normal.woff2">fonts/inter-latin-wght-normal.woff2</a></td><td class="n">48256</td><td class="h">sha384-l0ql7Q1zqvX5klA…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/android-chrome-192x192.png">icons/android-chrome-192x192.png</a></td><td class="n">24256</td><td class="h">sha384-71UVY6vd9I/q1cR…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/android-chrome-512x512.png">icons/android-chrome-512x512.png</a></td><td class="n">144926</td><td class="h">sha384-DrHvFQm3BSpHyRg…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/apple-touch-icon.png">icons/apple-touch-icon.png</a></td><td class="n">22046</td><td class="h">sha384-u5+xObVucWrYwRp…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-16x16.png">icons/favicon-16x16.png</a></td><td class="n">631</td><td class="h">sha384-GNeju8SO9OHxbDN…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-32x32.png">icons/favicon-32x32.png</a></td><td class="n">1493</td><td class="h">sha384-BBeLlGkDWnKfmvd…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-48x48.png">icons/favicon-48x48.png</a></td><td class="n">1685</td><td class="h">sha384-UWjLdmR0hTxOzD0…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-dark.svg">icons/favicon-dark.svg</a></td><td class="n">4033</td><td class="h">sha384-GZN0NUYujw++hUi…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-light.svg">icons/favicon-light.svg</a></td><td class="n">4033</td><td class="h">sha384-yThbq035Ys4Xih5…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-mono-black.svg">icons/favicon-mono-black.svg</a></td><td class="n">3943</td><td class="h">sha384-PvWUfR4dCN6ufEk…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon-mono-white.svg">icons/favicon-mono-white.svg</a></td><td class="n">3943</td><td class="h">sha384-+cvvAySvG+oQptf…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon.ico">icons/favicon.ico</a></td><td class="n">15406</td><td class="h">sha384-ajpHZdOiYud2PDG…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/favicon.svg">icons/favicon.svg</a></td><td class="n">3989</td><td class="h">sha384-VedqBLa1rjLF/Ny…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/icons/site.webmanifest">icons/site.webmanifest</a></td><td class="n">450</td><td class="h">sha384-LGNpnHWJ7EIBust…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/logo/logo-mark.color.svg">logo/logo-mark.color.svg</a></td><td class="n">3952</td><td class="h">sha384-jsXq2Z+su7odo7E…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/logo/logo-mark.dark.svg">logo/logo-mark.dark.svg</a></td><td class="n">3952</td><td class="h">sha384-uT9wFl9lUk/QsEy…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/logo/logo-mark.mono-black.svg">logo/logo-mark.mono-black.svg</a></td><td class="n">3862</td><td class="h">sha384-+kwMW70owk+rXOn…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/logo/logo-mark.mono-white.svg">logo/logo-mark.mono-white.svg</a></td><td class="n">3862</td><td class="h">sha384-CidygiCSBbmMVFb…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/logo/logo-mark.svg">logo/logo-mark.svg</a></td><td class="n">3952</td><td class="h">sha384-o3IGktoxlyHDkiy…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/primitives.css">primitives.css</a></td><td class="n">17714</td><td class="h">sha384-PxkE/pqcgIo/GcO…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/profiles/developer.css">profiles/developer.css</a></td><td class="n">2483</td><td class="h">sha384-tL+hLQOs/bP9UHq…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/profiles/docs.css">profiles/docs.css</a></td><td class="n">2478</td><td class="h">sha384-JuvGmPn81dYDmgX…</td></tr>
+<tr><td><a href="/ui/v0.1.0-rc.f0db1b97/tokens.css">tokens.css</a></td><td class="n">21119</td><td class="h">sha384-oO5S8qbDsWIrWaC…</td></tr>
+</tbody></table>
+<p style="margin-top:32px;color:#8896a6;font-size:12px">由 <code>autional/ui</code> 的 <code>scripts/build-cdn.mjs</code> 生成，请勿手工编辑。</p>
 </body></html>

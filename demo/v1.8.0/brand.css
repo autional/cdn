@@ -1,0 +1,1140 @@
+/* ==========================================================================
+   Autional Service Lab · 品牌 CSS 唯一源（ui-demo/demokit）
+   --------------------------------------------------------------------------
+   规则（SPEC §6 配套，勿违反）：
+   1. 本文件是全部服务 demo 的品牌样式唯一源，禁止在服务仓内联品牌 CSS。
+   2. 颜色/字体/阴影一律引用 :root 变量，禁止写死色值。
+   3. 动效红线（§4.5）：
+      - 只允许 S 级（transform/opacity）与 ≤120ms 短颜色过渡（C 级）；
+      - 禁止 transition: all、layout 属性动画、无限循环动画；
+      - 时长一律引用 --motion-* / --ease-* token；
+      - prefers-reduced-motion: reduce 下全部动画关闭。
+   4. 页面形态通过 body 类切换：门户页 body.dk-portal，业务页 body.dk-app。
+   ========================================================================== */
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── DESIGN TOKENS ──
+   取值策略（v1.7.0 起）：语义源 = CDN 设计令牌（https://cdn.autional.cn/ui/v0.1.0-rc/
+   tokens.css，由各页 <head> 于 brand.css 之前 <link> 引入）。本文件用「CDN token
+   别名 + 现值 fallback」：CDN 可达时收敛单一真源，不可达/未接线时回落现值（零回归）。
+   同名同值 token（--radius-*）保留字面量；新增色值前先查 CDN tokens.css 有无对应档。 ── */
+:root {
+  /* 品牌色 */
+  --primary: var(--color-primary-700, #003153);
+  --primary-hover: #124b70; /* demo 专用交互色（CDN 无对应档） */
+  --primary-soft: var(--color-primary-500, #235f84);
+  --primary-deep: var(--color-primary-900, #041d31);
+  --primary-100: var(--color-primary-100, #d1e5f2);
+  --primary-200: var(--color-primary-200, #9ec2db);
+  --primary-300: var(--color-primary-300, #6a9fbe);
+  --sky: var(--color-sky-500, #87ceeb);
+  --sky-50: var(--color-sky-100, #eef9fd);
+  --amber: var(--color-amber-500, #ffbf00);
+  /* 表面 / 文本 */
+  --surface: var(--color-bg-surface, #ffffff);
+  --surface-muted: var(--color-bg-muted, #f8fbfe);
+  --text-primary: var(--color-text-primary, #041d31);
+  --text-secondary: var(--color-text-secondary, #235f84);
+  --text-muted: var(--color-text-muted, #64748d);
+  --text-inverse: var(--color-text-inverse, #f8fafc);
+  --text-on-primary: #ffffff; /* 品牌实底（primary/error-strong）上的文字色 */
+  /* 开发者深色面板（demo 专用双档，CDN 无对应） */
+  --dev-surface: #031425;
+  --dev-surface-strong: #020b14;
+  /* 语义色 */
+  --success: var(--color-success, #52c41a);
+  --warning: var(--color-warning, #faad14);
+  --error: var(--color-danger, #ff4d4f);
+  --info: var(--color-info, #1890ff);
+  /* 阴影：不在本处定义 —— CDN tokens.css 提供 --shadow-soft/-card/-brand/-deep；
+     使用点写成 var(--shadow-X, <原字面量>)：CDN 可达时用 CDN 值，断供时回落原值 */
+  /* 圆角 / 字体 */
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  /* 动效 token（唯一源，勿在组件内写死时长/缓动；--motion-fast 固定 120ms ——
+     C 级过渡红线 ≤120ms，CDN 最近档 150ms 不采用） */
+  --motion-fast: 120ms;
+  --motion-base: var(--motion-duration-base, 200ms);
+  --motion-slow: var(--motion-duration-slow, 320ms);
+  --ease-out: var(--motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  --ease-in-out: var(--motion-ease-in-out, cubic-bezier(0.65, 0, 0.35, 1));
+  /* 状态柔和底/描边（值取自既有 .pill / .badge 字面量，非新造色） */
+  --success-soft: #f0fdf4;
+  --success-border: #bbf7d0;
+  --error-soft: #fef2f2;
+  --error-border: #fecaca;
+  --error-strong: #b91c1c;
+  --warning-soft: #fffbeb;
+  --warning-border: #fde68a;
+  --amber-soft: #fff8e6;
+  /* 兼容别名垫片（迁移期；页面应改用 --error/--text-muted，v1.4 删除） */
+  --danger: var(--error);
+  --muted: var(--text-muted);
+  /* 组件参数：token 展示盒最大高度（各页可用内联 --dk-token-maxh 覆盖） */
+  --dk-token-maxh: 130px;
+}
+
+/* ── BASE ── */
+body {
+  font-family: var(--font-sans, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  color: var(--text-primary);
+  background-color: var(--surface-muted);
+  background-image: var(--image-page-light,
+    radial-gradient(circle at top left, rgba(135, 206, 235, 0.16), transparent 32%),
+    radial-gradient(circle at top right, rgba(255, 191, 0, 0.10), transparent 22%),
+    linear-gradient(180deg, #f8fbfe 0%, #ffffff 26%, #f7fafd 100%));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: rgba(135, 206, 235, 0.35); color: var(--primary); }
+
+/* ── 动效基础设施（S 级：transform/opacity；一次性，可中断） ── */
+@keyframes dk-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dk-pulse {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.6); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 连接成功 pulse 一次（非循环） */
+header .status-dot.ok { animation: dk-pulse var(--motion-base) var(--ease-out) 1; }
+
+/* 卡片入场：一次性 fade-up + stagger（最多 5 张，60ms 错峰） */
+.dk-portal .cards .card {
+  animation: dk-fade-up var(--motion-slow) var(--ease-out) both;
+}
+.dk-portal .cards .card:nth-child(2) { animation-delay: 60ms; }
+.dk-portal .cards .card:nth-child(3) { animation-delay: 120ms; }
+.dk-portal .cards .card:nth-child(4) { animation-delay: 180ms; }
+.dk-portal .cards .card:nth-child(5) { animation-delay: 240ms; }
+
+/* ==========================================================================
+   门户页（body.dk-portal）· 居中大 header + 卡片 + 端点表 + footer
+   ========================================================================== */
+.dk-portal { padding: 64px 24px 48px; align-items: center; }
+
+.dk-portal header { text-align: center; margin-bottom: 56px; }
+.dk-portal header .brand { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 22px; }
+.dk-portal header .brand .logo { height: 52px; width: auto; flex-shrink: 0; }
+.dk-portal header .brand-text { text-align: left; }
+.dk-portal header .brand-text .kicker {
+  display: block;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.24em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.dk-portal header h1 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+.dk-portal header h1 .ver {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  vertical-align: 4px;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-portal header .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+.dk-portal header .status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px; color: var(--text-secondary);
+  border: 1px solid var(--primary-100);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-portal header .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+.dk-portal header .status-dot.dead { background: var(--error); }
+
+/* 卡片 */
+.dk-portal .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 920px;
+  margin-bottom: 56px;
+}
+.dk-portal .card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card, 0 20px 60px rgba(3, 20, 37, 0.08));
+  position: relative;
+  overflow: hidden;
+  /* 动效：hover 上浮 transform（S 级）；阴影用 ::after 伪层 opacity（S 级） */
+  transition: transform var(--motion-base) var(--ease-out), border-color var(--motion-base) var(--ease-out);
+}
+.dk-portal .card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--sky), transparent);
+}
+/* 阴影伪层：hover 时 opacity 过渡，避免 box-shadow 动画（D 级） */
+.dk-portal .card::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-brand, 0 32px 100px rgba(3, 20, 37, 0.12));
+  opacity: 0;
+  transition: opacity var(--motion-base) var(--ease-out);
+  pointer-events: none;
+}
+.dk-portal .card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-200);
+}
+.dk-portal .card:hover::after { opacity: 1; }
+.dk-portal .card .tag {
+  align-self: flex-start;
+  display: inline-flex; align-items: center;
+  padding: 5px 14px;
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-full);
+  background: #fff;
+  color: var(--primary);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.22em;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.dk-portal .card .tag:hover { transform: scale(1.02); }
+.dk-portal .card h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+.dk-portal .card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; flex: 1; }
+.dk-portal .card .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.dk-portal .card .meta span {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-full);
+  background: #fff;
+  font-family: var(--mono);
+  font-size: 11px; color: var(--text-secondary);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.dk-portal .card .meta span:hover { transform: scale(1.02); }
+.dk-portal .card .open {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 4px;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+  /* 动效：背景色短过渡（C 级 ≤120ms）+ transform（S 级） */
+  transition: background-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+}
+.dk-portal .card .open:hover { background: var(--primary-hover); }
+.dk-portal .card .open:active { transform: scale(0.97); }
+.dk-portal .card:hover .open { transform: translateY(-1px); }
+.dk-portal .card .open svg { width: 14px; height: 14px; transition: transform var(--motion-fast) var(--ease-out); }
+.dk-portal .card:hover .open svg { transform: translateX(3px); }
+
+/* 端点表 */
+.dk-portal .info { width: 100%; max-width: 920px; }
+.dk-portal .info h2 {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.24em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  padding-left: 4px;
+}
+.dk-portal .info .table-wrap {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card, 0 20px 60px rgba(3, 20, 37, 0.08));
+  overflow: hidden;
+}
+.dk-portal .info table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dk-portal .info th {
+  text-align: left; padding: 14px 20px;
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--primary-100);
+  color: var(--text-secondary);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.14em;
+}
+.dk-portal .info td {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(209, 229, 242, 0.6);
+  color: var(--text-muted);
+  transition: background-color var(--motion-fast) var(--ease-out);
+}
+.dk-portal .info tr:last-child td { border-bottom: none; }
+.dk-portal .info tr:hover td { background: var(--surface-muted); }
+.dk-portal .info td:first-child {
+  color: var(--primary);
+  font-family: var(--mono);
+  font-size: 12.5px; font-weight: 600;
+  white-space: nowrap;
+}
+.dk-portal .info .auth { color: var(--warning); font-size: 11px; }
+.dk-portal .info a { color: var(--primary); text-decoration: none; }
+.dk-portal .info a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+.dk-portal footer {
+  margin-top: 48px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-muted);
+  letter-spacing: 0.14em;
+}
+
+/* ==========================================================================
+   业务页（body.dk-app）· sticky 毛玻璃顶栏 + 侧栏 + 深色面板 + 状态 pills
+   ========================================================================== */
+.dk-app header {
+  height: 72px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--primary-100);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 30;
+  position: sticky;
+  top: 0;
+}
+.dk-app header .brand { display: flex; align-items: center; gap: 14px; }
+.dk-app header .brand .logo { height: 36px; width: auto; flex-shrink: 0; }
+.dk-app header .brand-text .kicker {
+  display: block;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.dk-app header .brand-text h1 {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.dk-app header .brand-text h1 span { color: var(--text-secondary); font-weight: 600; font-size: 14px; margin-left: 6px; }
+.dk-app header .status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 12px; color: var(--text-secondary);
+  border: 1px solid var(--primary-100);
+  background: #fff;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-app header .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+.dk-app header .status-dot.dead { background: var(--error); }
+
+.dk-app main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* 侧栏（业务页） */
+.dk-app aside {
+  width: 240px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid var(--primary-100);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* 左侧栏品牌块（无 header 形态）：logo + 服务名 + 连接状态 */
+.dk-app aside .dk-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--primary-100);
+}
+.dk-app aside .dk-brand .logo { height: 34px; width: auto; flex-shrink: 0; }
+.dk-app aside .dk-brand .txt { min-width: 0; flex: 1; }
+.dk-app aside .dk-brand .kicker {
+  display: block;
+  /* label-caps（DESIGN.md）：12px/600/1.2 + 0.24em，英文 kicker 标签 */
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.24em;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+.dk-app aside .dk-brand h1 {
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dk-app aside .dk-brand .status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px; color: var(--text-secondary);
+  border: 1px solid var(--primary-100);
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+  margin-top: 6px;
+}
+.dk-app aside .dk-brand .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+.dk-app aside .dk-brand .status-dot.dead { background: var(--error); }
+.dk-app aside .dk-brand .status-dot.ok { animation: dk-pulse var(--motion-base) var(--ease-out) 1; }
+.dk-app aside section h2 {
+  /* label-caps 变体（中文分组标题）：12px/600，字距收敛避免中文发虚 */
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.dk-app aside .row { display: flex; justify-content: space-between; font-size: 12px; font-family: var(--mono); margin-bottom: 8px; gap: 12px; }
+.dk-app aside .row span:first-child { color: var(--text-muted); }
+.dk-app aside .row span:last-child { color: var(--text-primary); font-weight: 600; text-align: right; word-break: break-all; }
+.dk-app aside .hint { font-size: 12px; font-family: var(--mono); color: var(--text-muted); line-height: 1.6; }
+.dk-app aside label {
+  /* label-caps 变体（中文）：12px/600 */
+  display: block; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); margin-bottom: 6px;
+}
+.dk-app aside input[type=text] {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--primary-200);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 12px;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.dk-app aside input[type=text]:focus { border-color: var(--primary-300); box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25); }
+.dk-app aside .action-btn {
+  width: 100%; padding: 10px 16px;
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-full);
+  background: #fff;
+  color: var(--text-secondary);
+  /* label-md（DESIGN.md）：14px/600 */
+  font-size: 14px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  cursor: pointer;
+  margin-bottom: 8px;
+  /* 动效：禁 transition: all；列具体属性 */
+  transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+}
+.dk-app aside .action-btn:hover { border-color: var(--primary-300); background: var(--sky-50); }
+.dk-app aside .action-btn:active { transform: scale(0.97); }
+.dk-app aside .action-btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-app aside .action-btn.primary:hover { background: var(--primary-hover); }
+.dk-app aside .engine {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--primary-100);
+}
+.dk-app aside .engine a { color: var(--text-secondary); text-decoration: none; }
+.dk-app aside .engine a:hover { color: var(--primary); text-decoration: underline; }
+
+/* 内容区 */
+.dk-app .content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px;
+}
+
+/* 深色开发者面板 */
+.dk-app .panel {
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(135, 206, 235, 0.14), transparent 38%),
+    radial-gradient(circle at 90% 100%, rgba(255, 191, 0, 0.06), transparent 30%),
+    linear-gradient(180deg, var(--dev-surface) 0%, var(--dev-surface-strong) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-deep, 0 32px 120px rgba(3, 20, 37, 0.38));
+  padding: 40px 40px 36px;
+  position: relative;
+  overflow: hidden;
+  scroll-margin-top: 96px;
+}
+.dk-app .panel .hud-tl {
+  position: absolute; top: 22px; left: 28px;
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(135, 206, 235, 0.55);
+}
+.dk-app .panel-head {
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 8px;
+}
+.dk-app .panel-head .no {
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 700;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+}
+.dk-app .panel-head h2 {
+  /* heading-md（DESIGN.md）：24px/700/-0.02em */
+  font-size: 24px; font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.33;
+  color: var(--text-inverse);
+}
+.dk-app .panel .desc {
+  /* body-sm（DESIGN.md）：14px/400/1.6 */
+  font-size: 14px;
+  color: rgba(248, 250, 252, 0.55);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 720px;
+}
+.dk-app .panel .desc code {
+  /* code-md（DESIGN.md）：14px mono */
+  font-family: var(--mono); font-size: 14px;
+  color: var(--sky);
+}
+
+/* 深色输入 */
+.dk-app .field { margin-bottom: 16px; }
+.dk-app .field label {
+  /* label-caps 变体（中文）：12px/600 */
+  display: block;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: rgba(135, 206, 235, 0.7);
+  margin-bottom: 8px;
+}
+.dk-app .field input[type=text] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-inverse);
+  font-family: var(--mono);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.dk-app .field input[type=text]:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.18);
+}
+.dk-app .field input[type=text]::placeholder { color: rgba(248, 250, 252, 0.3); }
+
+/* 按钮（深色面板内） */
+.dk-app .btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-inverse);
+  /* label-md（DESIGN.md）：14px/600 */
+  font-size: 14px; font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+}
+.dk-app .btn:hover { background: rgba(255, 255, 255, 0.16); }
+.dk-app .btn:active { transform: scale(0.97); }
+.dk-app .btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 8px 28px rgba(0, 49, 83, 0.5);
+}
+.dk-app .btn.primary:hover { background: var(--primary-hover); }
+.dk-app .btn.amber {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--primary-deep);
+}
+.dk-app .btn.amber:hover { background: #ffcc33; }
+
+/* 状态 pills */
+.dk-app .statusbar { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+.dk-app .pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  background: var(--sky-50); color: var(--primary-soft); border: 1px solid var(--primary-100);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.dk-app .pill:hover { transform: scale(1.02); }
+.dk-app .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary-200); }
+.dk-app .pill.ok { color: var(--success); border-color: #bbf7d0; background: #f0fdf4; }
+.dk-app .pill.ok .dot { background: var(--success); }
+.dk-app .pill.bad { color: var(--error); border-color: #fecaca; background: #fef2f2; }
+.dk-app .pill.bad .dot { background: var(--error); }
+
+/* 结果输出块 */
+.dk-app .result {
+  margin-top: 20px;
+  border-radius: 16px;
+  padding: 14px 18px;
+  /* code-md（DESIGN.md）：14px mono 数据 */
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 260px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d7ecfa;
+}
+.dk-app .result.ok { border-left: 3px solid var(--success); }
+.dk-app .result.err { border-left: 3px solid var(--error); }
+.dk-app .result.waiting { color: rgba(248, 250, 252, 0.35); }
+
+.dk-app footer { text-align: center; padding: 20px 0 30px; font-size: 11px; font-family: var(--mono); color: var(--text-muted); letter-spacing: 0.14em; }
+
+/* ==========================================================================
+   业务页增强（v1.0.2 起）：浅色面板变体 + 侧栏导航 + 面板切换
+   默认 .panel 仍是深色（Service Lab 历史形态）；业务页可选 .panel.light。
+   v1.1.1：三栏布局（左导航 aside + 中内容 .content + 右参数 .side）
+   ========================================================================== */
+
+/* 左栏底部操作区（v1.1.6）：小按钮 + 折叠参数区（替代废弃的三栏右 .side） */
+.dk-app aside .nav-foot {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--primary-100);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dk-app aside .nav-foot .mini-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px; font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.dk-app aside .nav-foot .mini-btn:hover { background: var(--sky-50); color: var(--primary); }
+.dk-app aside .nav-foot .mini-btn.active { color: var(--primary); background: var(--sky-50); }
+.dk-app aside .nav-foot a.mini-btn { text-decoration: none; }
+/* 折叠参数区：默认收起，点击 参数 按钮展开（dk 组件 data-toggle 控制） */
+.dk-app aside .collapse { display: none; }
+.dk-app aside .collapse.open {
+  display: block;
+  animation: dk-fade-up var(--motion-slow) var(--ease-out) both;
+}
+.dk-app aside .collapse .field { margin-bottom: 12px; }
+.dk-app aside .collapse label {
+  display: block; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); margin-bottom: 6px;
+}
+.dk-app aside .collapse input[type=text] {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--primary-200);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 12px;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.dk-app aside .collapse input[type=text]:focus { border-color: var(--primary-300); box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25); }
+.dk-app aside .collapse .hint { font-size: 11px; font-family: var(--mono); color: var(--text-muted); line-height: 1.6; }
+
+/* 侧栏导航按钮（配合 aside section h2 分组使用） */
+.dk-app aside .nav-group { display: flex; flex-direction: column; gap: 6px; }
+.dk-app aside .nav-btn {
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  /* label-md（DESIGN.md）：14px/600；中文导航不用 mono/不加字距 */
+  font-size: 14px; font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+}
+.dk-app aside .nav-btn:hover { background: var(--sky-50); color: var(--primary); }
+.dk-app aside .nav-btn:active { transform: scale(0.98); }
+.dk-app aside .nav-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-app aside .nav-btn .ico { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.7; }
+.dk-app aside .nav-btn.active .ico { opacity: 1; }
+
+/* 面板切换：active 面板淡入（display 由业务页 JS 控制，避免破坏既有页面） */
+.dk-app .content > .panel.active {
+  animation: dk-fade-up var(--motion-slow) var(--ease-out) both;
+}
+
+/* 浅色面板变体（白底 + 浅边框，替代深色开发者面板） */
+.dk-app .panel.light {
+  background: var(--surface);
+  border: 1px solid var(--primary-100);
+  box-shadow: var(--shadow-card, 0 20px 60px rgba(3, 20, 37, 0.08));
+}
+.dk-app .panel.light .hud-tl { color: rgba(0, 49, 83, 0.45); }
+.dk-app .panel.light .panel-head .no { color: var(--primary); }
+.dk-app .panel.light .panel-head h2 { color: var(--text-primary); }
+.dk-app .panel.light .desc { color: var(--text-muted); }
+.dk-app .panel.light .desc code { color: var(--primary-soft); }
+/* 浅色输入 */
+.dk-app .panel.light .field label { color: var(--text-secondary); }
+.dk-app .panel.light .field input[type=text],
+.dk-app .panel.light .field input[type=email],
+.dk-app .panel.light .field select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--primary-200);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.dk-app .panel.light .field input[type=text]:focus,
+.dk-app .panel.light .field input[type=email]:focus,
+.dk-app .panel.light .field select:focus {
+  border-color: var(--primary-300);
+  box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25);
+}
+.dk-app .panel.light .field input[type=text]::placeholder,
+.dk-app .panel.light .field input[type=email]::placeholder { color: var(--text-muted); }
+.dk-app .panel.light .field select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23235f84' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+/* 浅色按钮 */
+.dk-app .panel.light .btn {
+  background: var(--sky-50);
+  border: 1px solid var(--primary-100);
+  color: var(--primary-soft);
+}
+.dk-app .panel.light .btn:hover { background: #e2f1fa; }
+.dk-app .panel.light .btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-app .panel.light .btn.primary:hover { background: var(--primary-hover); }
+.dk-app .panel.light .btn.amber {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--primary-deep);
+}
+.dk-app .panel.light .btn.amber:hover { background: #ffcc33; }
+/* 浅色结果输出 */
+.dk-app .panel.light .result {
+  background: var(--surface-muted);
+  border: 1px solid var(--primary-100);
+  color: var(--text-primary);
+}
+.dk-app .panel.light .result.ok { border-left: 3px solid var(--success); }
+.dk-app .panel.light .result.err { border-left: 3px solid var(--error); }
+.dk-app .panel.light .result.waiting { color: var(--text-muted); }
+/* 浅色资料卡 / 任务列表 */
+.dk-app .panel.light .profile-card {
+  background: var(--sky-50);
+  border: 1px solid var(--primary-100);
+}
+.dk-app .panel.light .profile-card .info .name { color: var(--text-primary); }
+.dk-app .panel.light .profile-card .info .id { color: var(--text-secondary); }
+.dk-app .panel.light .profile-card .info .meta-row span { color: var(--text-muted); }
+.dk-app .panel.light .task {
+  background: var(--surface-muted);
+  border: 1px solid var(--primary-100);
+}
+.dk-app .panel.light .task .tname { color: var(--text-primary); }
+.dk-app .panel.light .task .tmeta { color: var(--text-secondary); }
+
+/* ==========================================================================
+   通用数据展示组件（v1.2.0 起）· light 优先
+   --------------------------------------------------------------------------
+   这些组件此前在 8~16 个服务业务页各自内联重复（`.mini-table`/`.note*`/
+   `.token-box`/`.badge`/`.actions`/`.fields`/`.btn.danger`/`.task-list`/`.overview`
+   /`.kv`/`.stat-box`/`.flow` 等），现收归唯一源。
+   - 类名：新组件统一 `dk-` 前缀；`mini-table/token-box/badge/actions/fields/
+     task-list/overview/kv/stat-box/flow/step` 保留裸类兼容（HTML 零改动）。
+   - dark 变体见 `brand-dark.css`（作用域 `.dk-app .panel:not(.light)`，按需 `<link>`）。
+   - 本文件在页面内联 <style> 之前加载；同特异性下页面内联仍可覆盖 → 逐页迁移零回归。
+   ========================================================================== */
+
+/* ── 键盘焦点可见（原先只有 input:focus，按钮无焦点环） ── */
+.dk-app .btn:focus-visible,
+.dk-app .nav-btn:focus-visible,
+.dk-app .mini-btn:focus-visible,
+.dk-app .action-btn:focus-visible,
+.dk-app .dk-identity-btn:focus-visible,
+.dk-app [data-toggle]:focus-visible,
+.dk-portal .card:focus-visible {
+  outline: 2px solid var(--primary-soft);
+  outline-offset: 2px;
+}
+/* 深色面板上焦点环换高对比 sky（浅色面上 --sky 仅 1.74:1，不达标） */
+.dk-app .panel:not(.light) :is(.btn, .nav-btn, .mini-btn, .action-btn, [data-toggle]):focus-visible {
+  outline-color: var(--sky);
+}
+
+/* ── 提示/说明框（变体同时作为裸类兼容基类，避免迁移后掉几何） ── */
+.dk-note, .note-ok, .note-danger, .note-err {
+  border-left: 3px solid var(--warning);
+  background: var(--warning-soft);
+  padding: 6px 10px;
+  margin-top: 8px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+.dk-note.ok, .note-ok { border-left-color: var(--success); background: var(--success-soft); }
+.dk-note.danger, .dk-note.err, .note-danger, .note-err { border-left-color: var(--error); background: var(--error-soft); }
+
+/* ── 小数据表（浅色；修正原深色边框在白底不可见的问题） ── */
+.dk-table, .mini-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.dk-table th, .dk-table td, .mini-table th, .mini-table td {
+  border: 1px solid var(--primary-100);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+  word-break: break-all;
+}
+.dk-table th, .mini-table th {
+  background: var(--surface-muted);
+  color: var(--text-secondary);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.dk-table td, .mini-table td { color: var(--text-primary); }
+.dk-table tbody tr:hover td, .mini-table tbody tr:hover td { background: var(--sky-50); }
+.dk-table tr:last-child td, .mini-table tr:last-child td { border-bottom: none; }
+.verdict-pass { color: var(--text-primary); font-weight: 600; }
+.verdict-fail { color: var(--error-strong); font-weight: 600; }
+.dk-table-wrap { overflow-x: auto; }
+
+/* ── token / 长文本等宽展示盒 ── */
+.dk-token-box, .token-box {
+  word-break: break-all;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  background: var(--surface-muted);
+  border: 1px solid var(--primary-100);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-top: 6px;
+  max-height: var(--dk-token-maxh, 130px);
+  overflow: auto;
+}
+
+/* ── 状态徽章（hash 双仓同源） ── */
+.dk-badge, .badge {
+  display: none; align-items: center; gap: 8px;
+  padding: 9px 20px;
+  border-radius: var(--radius-full);
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.dk-badge.show, .badge.show { display: inline-flex; }
+.dk-badge .dot, .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.dk-badge.pass, .badge.pass { color: var(--text-secondary); border-color: var(--success-border); background: var(--success-soft); }
+.dk-badge.pass .dot, .badge.pass .dot { background: var(--success); }
+.dk-badge.fail, .badge.fail { color: var(--error-strong); border-color: var(--error-border); background: var(--error-soft); }
+.dk-badge.fail .dot, .badge.fail .dot { background: var(--error); }
+.dk-badge.rehash, .badge.rehash { color: var(--text-primary); border-color: var(--warning-border); background: var(--warning-soft); }
+.dk-badge.rehash .dot, .badge.rehash .dot { background: var(--warning); }
+
+/* ── 表单动作行 + 两列表单栅格 ── */
+.actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.actions .btn { margin: 0; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 16px; }
+.field.full { grid-column: 1 / -1; }
+/* 文本域：与 input 同构（此前 .field 只覆盖 input，页面内 textarea 落到 UA 默认） */
+.dk-app .field textarea,
+.dk-app .panel.light .field textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--primary-200);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-primary);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  resize: vertical;
+  min-height: 72px;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.dk-app .field textarea:focus,
+.dk-app .panel.light .field textarea:focus { border-color: var(--primary-300); box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25); }
+
+/* ── 危险按钮（浅色面板内；此前 .btn.danger 无共享样式，退化为普通按钮） ── */
+.dk-app .btn.danger { background: var(--error-soft); border-color: var(--error-strong); color: var(--error-strong); }
+.dk-app .btn.danger:hover { background: var(--error-strong); border-color: var(--error-strong); color: var(--text-on-primary); }
+.dk-app .panel.light .btn.danger { background: var(--error-soft); border-color: var(--error-strong); color: var(--error-strong); }
+.dk-app .panel.light .btn.danger:hover { background: var(--error-strong); border-color: var(--error-strong); color: var(--text-on-primary); }
+
+/* ── 任务/调度器列表（rbac/status 等 16 服务生成的 DOM，此前无布局亦无状态色） ── */
+.task-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.dk-app .task { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--surface-muted); border: 1px solid var(--primary-100); }
+.dk-app .task .tname { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.dk-app .task .tmeta { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+.dk-app .task .tenabled, .dk-app .task .tdisabled {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 10px; border-radius: var(--radius-full);
+  border: 1px solid var(--primary-100); background: var(--surface-muted);
+  font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text-muted);
+}
+.dk-app .task .tenabled::before, .dk-app .task .tdisabled::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.dk-app .task .tenabled { background: var(--success-soft); border-color: var(--success-border); color: var(--text-primary); }
+.dk-app .task .tenabled::before { background: var(--success); }
+
+/* ── 资料卡（profile 等；此前只有 .panel.light 颜色覆盖，无盒子规则） ── */
+.profile-card { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px; border-radius: 16px; background: var(--sky-50); border: 1px solid var(--primary-100); }
+.profile-card .avatar {
+  width: 48px; height: 48px; flex-shrink: 0; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--text-on-primary);
+  font-family: var(--mono); font-size: 16px; font-weight: 700;
+}
+.profile-card .info { min-width: 0; }
+.profile-card .info .name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.profile-card .info .id { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); word-break: break-all; }
+.profile-card .info .meta-row { display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ── 概览条 / 键值表 / 统计块 / 流程步骤（单仓组件，按众数收敛） ── */
+.dk-overview, .overview {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding: 18px 20px; border: 1px solid var(--primary-100); border-radius: 16px;
+  background: var(--sky-50); margin-bottom: 16px;
+}
+.dk-overview .indicator, .overview .indicator { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; background: var(--text-muted); }
+.dk-overview .indicator.ok, .overview .indicator.ok,
+.dk-overview .indicator.healthy, .overview .indicator.healthy,
+.dk-overview .indicator.active, .overview .indicator.active { background: var(--success); }
+.dk-overview .indicator.warn, .overview .indicator.warn,
+.dk-overview .indicator.degraded, .overview .indicator.degraded,
+.dk-overview .indicator.suspended, .overview .indicator.suspended { background: var(--warning); }
+.dk-overview .indicator.bad, .overview .indicator.bad,
+.dk-overview .indicator.down, .overview .indicator.down,
+.dk-overview .indicator.closed, .overview .indicator.closed { background: var(--error); }
+.dk-overview .ov-text, .overview .ov-text { flex: 1; min-width: 180px; }
+.dk-overview .overall, .overview .overall { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.dk-overview .detail, .overview .detail { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+.dk-overview .stat, .overview .stat { text-align: center; padding: 0 14px; }
+.dk-overview .stat .num, .overview .stat .num { font-family: var(--mono); font-size: 20px; font-weight: 800; color: var(--primary); }
+.dk-overview .stat .label, .overview .stat .label { font-size: 12px; color: var(--text-secondary); }
+
+.dk-kv, .kv { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--primary-100); font-size: 13px; color: var(--text-primary); }
+.dk-kv:last-child, .kv:last-child { border-bottom: none; }
+.dk-kv b, .kv b { font-family: var(--mono); color: var(--primary); font-weight: 600; text-align: right; word-break: break-all; }
+
+.dk-stat-box, .stat-box { flex: 1; min-width: 140px; padding: 16px 18px; border: 1px solid var(--primary-100); border-radius: 14px; background: var(--sky-50); }
+.dk-stat-box .num, .stat-box .num { font-family: var(--mono); font-size: 22px; font-weight: 800; color: var(--primary); }
+.dk-stat-box .lbl, .stat-box .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.dk-bar-row, .bar-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 12px; }
+.dk-bar-row .name, .bar-row .name { width: 90px; color: var(--text-secondary); font-family: var(--mono); }
+.dk-bar-row .bar, .bar-row .bar { height: 8px; border-radius: var(--radius-full); background: var(--primary-200); min-width: 2px; }
+
+.dk-flow, .flow { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.dk-flow .step, .flow .step, .dk-flow .dk-step, .flow .dk-step { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; border: 1px solid var(--primary-100); border-radius: 16px; background: var(--sky-50); }
+.dk-flow .step-no, .flow .step-no { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; font-weight: 700; background: var(--primary-200); color: var(--primary-deep); }
+.dk-flow .step-no.done, .flow .step-no.done { background: var(--success); color: var(--primary-deep); }
+.dk-flow .step-no.err, .flow .step-no.err { background: var(--error); color: var(--primary-deep); }
+.dk-flow .step-name, .flow .step-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.dk-flow .step-api, .flow .step-api { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+.dk-flow .step-detail, .flow .step-detail { margin-top: 6px; max-height: 160px; overflow: auto; font-family: var(--mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
+.dk-flow .step-no.err ~ .step-body .step-detail, .flow .step-no.err ~ .step-body .step-detail { color: var(--error-strong); }
+
+/* ==========================================================================
+   演示身份条（dk.identity，v1.4.0）· 纯前端演示编排，非安全边界
+   --------------------------------------------------------------------------
+   - 类名全部独立（dk- 前缀），不进 .nav-btn/.panel/.content>.panel 等
+     e2e 精确计数的保留选择器；不 sticky，避免与 .panel 的
+     scroll-margin-top: 96px 深链锚点互压。
+   - 视觉与 header 玻璃条一致（半透明白 + blur + 描边 + 胶囊）。
+   ========================================================================== */
+.dk-identity {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--primary-100);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-identity-label {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+.dk-identity-btn {
+  padding: 5px 14px;
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+.dk-identity-btn:hover { border-color: var(--primary-300); background: var(--sky-50); }
+.dk-identity-btn:active { transform: scale(0.97); }
+.dk-identity-btn.active,
+.dk-identity-btn[aria-pressed="true"] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-on-primary);
+  box-shadow: var(--shadow-soft, 0 16px 40px rgba(0, 49, 83, 0.10));
+}
+.dk-identity-badge {
+  margin-left: auto;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-secondary);
+  padding-left: 8px;
+}
+
+/* ── 身份门禁（data-dk-requires 不足）：禁用 + 同行提示条，元素保持可见 ── */
+.dk-gated { opacity: 0.55; filter: grayscale(0.6); }
+.dk-gated[disabled], .dk-gated:disabled { cursor: not-allowed; }
+.dk-gate-note {
+  display: inline-block;
+  margin: 4px 0 4px 8px;
+  padding: 3px 10px;
+  border: 1px solid var(--warning-border);
+  border-radius: var(--radius-full);
+  background: var(--warning-soft);
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+/* ── 无障碍修正：状态 pill 文本改用深色（原 --success/--error on soft 底 AA 不达标） ── */
+.dk-app .pill.ok { color: var(--text-secondary); border-color: var(--success-border); background: var(--success-soft); }
+.dk-app .pill.bad { color: var(--error-strong); border-color: var(--error-border); background: var(--error-soft); }
+
+/* ── 结果盒：长串（JWT/base64）换行可读性 ── */
+.dk-app .result { overflow-wrap: anywhere; }
+
+/* ── 响应式 ── */
+@media (max-width: 900px) {
+  .dk-app main { flex-direction: column; }
+  .dk-app aside { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--primary-100); }
+  .dk-app .panel { padding: 28px 20px 24px; }
+  /* 侧栏转横向后触控目标补足 44px（桌面保持高密度） */
+  .dk-app aside .nav-btn, .dk-app aside .mini-btn, .dk-app aside .action-btn { min-height: 44px; }
+}
+
+@media (max-width: 640px) {
+  .dk-portal { padding: 40px 16px 32px; }
+  .dk-portal header h1 { font-size: 24px; }
+  .dk-portal header .brand .logo { height: 44px; }
+  .dk-portal .cards { grid-template-columns: 1fr; }
+  .dk-portal .info table { font-size: 12px; }
+  .dk-portal .info th, .dk-portal .info td { padding: 10px 12px; }
+  .dk-portal .info td:first-child { white-space: normal; word-break: break-all; }
+  .fields { grid-template-columns: 1fr; }
+  .actions { gap: 8px; }
+  .dk-app .task { flex-wrap: wrap; row-gap: 6px; }
+  .dk-app .task .tenabled, .dk-app .task .tdisabled { margin-left: 0; }
+  .dk-overview .ov-text, .overview .ov-text { min-width: 0; flex-basis: 100%; }
+  .dk-flow .step, .flow .step { padding: 12px 14px; }
+}
+
+/* ── 无障碍：减少动态效果时全部动画关闭（Apple §14） ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── 无障碍：减少透明度时毛玻璃层转实色（header/aside 使用 backdrop-filter） ── */
+@media (prefers-reduced-transparency: reduce) {
+  .dk-app header, .dk-app aside {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--surface);
+  }
+}

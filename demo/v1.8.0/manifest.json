@@ -1,0 +1,29 @@
+{
+  "$note": "demokit 运行时资产清单（ui-demo 模块发行版内嵌字节原样发布，来源=git blob 的 LF 字节）。路径一律不可变：内容变了必须换版本号。",
+  "version": "v1.8.0",
+  "base": "/demo/v1.8.0",
+  "origin": "https://cdn.autional.cn",
+  "generatedFrom": "autional/ui-demo",
+  "files": [
+    {
+      "path": "/demo/v1.8.0/brand.css",
+      "bytes": 49603,
+      "sha384": "sha384-oACT4IoKR2mHzpsmDvv0lRi5T7mH4kXjLtDPlH2Q/MiA5Nx6VK2umPqMt7KHN61f"
+    },
+    {
+      "path": "/demo/v1.8.0/brand-dark.css",
+      "bytes": 4980,
+      "sha384": "sha384-l6faFsyTCbevaeuMuP0rWvaFdXqkVO5qQxi0t39qFP+7iwMQb5UHaOOGtvYne0Lu"
+    },
+    {
+      "path": "/demo/v1.8.0/brand-logo.svg",
+      "bytes": 3935,
+      "sha384": "sha384-khDCbbGXAjENg6TWf26aFIObJZFwjbbJTG8V5exagE4eq3pKPaR2Iy/8Ey/VuyKK"
+    },
+    {
+      "path": "/demo/v1.8.0/demo.js",
+      "bytes": 34818,
+      "sha384": "sha384-tAclZKCKGsUGKS48fH+2HPPWpVUyRtwSvCKhPDY8cG8IkDn6OQmwOasx4STvGmcj"
+    }
+  ]
+}

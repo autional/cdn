@@ -1,0 +1,19 @@
+# 顺序很重要：gitattributes 里**最后匹配**的规则生效，所以通用规则必须写在前面。
+#
+# 这个仓的 ui/ 是生成物，manifest.json 里的 sha384 是对精确字节计算的。
+# 一旦行尾被转换，托管出去的字节就与清单对不上 —— 而且失配是静默的：
+# 只有主动把文件下载回来重算哈希才会发现（首次发布时 22 个文件里有 10 个 SVG 中招）。
+#
+# 规则：
+#   文本 → 一律 LF。scripts/build-cdn.mjs 在写入时已归一化为 LF，
+#          这里再加一道 eol=lf，保证检出、存储、托管三处字节一致。
+#   二进制 → 不做任何转换（其实 git 会自动识别，这里显式写出来表明意图）。
+* text=auto eol=lf
+
+*.png   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
