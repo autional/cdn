@@ -27,6 +27,18 @@ AI skill / onboarding 分发（`text/markdown`）。唯一源 = `autional/sdk` �
 - `/ai/<version>/…` 各区域的版本目录（互不相交）。
 - `/ai/latest.json` 短 TTL 指针，经 rewrite 指到本区域的版本；消费入口是 `/ai/latest/<文件>`。
 
+### ai/ 版本号（内容指纹）
+
+版本目录名 = `v0.1.0-<8hex>`。配方与 `autional/ui` 的 `build-cdn` 完全相同：
+
+```js
+fp = sha256(entries.map(e => e.rel + '\u0000' + 'sha384-' + sha384b64(e.bytes)).sort().join('\n')).digest('hex').slice(0, 8)
+```
+
+- `rel` = 版本目录内相对路径（正斜杠）；`bytes` = **git blob 原始字节（LF）**——不要用工作区检出字节（Windows 检出为 CRLF）。
+- 两区各算各的：内容不同 → 版本号不同。
+- 历史注记：首批 6 个版本号（2026-10-05）出自当时的未文档化流程，已不可复现；自 2026-10-10 起用上表配方。**旧版本号不追溯重命名**（铁律 1：目录不可变）。
+
 ## `demo/` 是什么
 
 服务 demo 的运行时资产（`brand.css` / `brand-dark.css` / `brand-logo.svg` / `demo.js`）。
@@ -55,7 +67,7 @@ go run ./cmd/publish-cdn -version v1.8.0 -out <cdn 仓路径>
 # ui/：在 autional/ui 仓里
 pnpm build:cdn            # 默认输出到 ../cdn
 
-# ai/：在 autional/sdk 生成产物后手工上架（新增版本目录 + 更新该区域的指针，两区互不影响）
+# ai/：在 autional/sdk 生成产物后手工上架（新增版本目录 + 更新该区域的指针与 vercel.json rewrite 目标；两区互不影响。版本号配方见「ai 版本号」节）
 
 # demo/：在 autional/ui-demo 仓里（对应版本已打 tag）
 go run ./cmd/publish-cdn -version v1.8.0 -out <cdn 仓路径>
