@@ -88,18 +88,18 @@
       "has": [
         { "type": "host", "value": "cdn.autional.cn" }
       ],
-      "destination": "/ai/v0.1.0-be3dab86/:path*"
+      "destination": "/ai/v0.1.0-48334a28/:path*"
     },
     {
       "source": "/ai/latest/:path*",
       "has": [
         { "type": "host", "value": "cn-cdn.vercel.app" }
       ],
-      "destination": "/ai/v0.1.0-be3dab86/:path*"
+      "destination": "/ai/v0.1.0-48334a28/:path*"
     },
     {
       "source": "/ai/latest/:path*",
-      "destination": "/ai/v0.1.0-6aef473d/:path*"
+      "destination": "/ai/v0.1.0-4f539405/:path*"
     }
   ]
 }
