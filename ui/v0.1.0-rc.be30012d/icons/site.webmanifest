@@ -3,12 +3,12 @@
   "short_name": "Autional",
   "icons": [
     {
-      "src": "https://cdn.autional.cn/ui/v0.1.0-rc.b0df014b/icons/android-chrome-192x192.png",
+      "src": "https://cdn.autional.cn/ui/v0.1.0-rc.be30012d/icons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://cdn.autional.cn/ui/v0.1.0-rc.b0df014b/icons/android-chrome-512x512.png",
+      "src": "https://cdn.autional.cn/ui/v0.1.0-rc.be30012d/icons/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }

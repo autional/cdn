@@ -138,6 +138,22 @@
 --color-chart-7-rgb: 139 92 246;
 --color-chart-8: #ef4444;
 --color-chart-8-rgb: 239 68 68;
+--color-syntax-plain: #f1f5f9;
+--color-syntax-plain-rgb: 241 245 249;
+--color-syntax-comment: #94a3b8;
+--color-syntax-comment-rgb: 148 163 184;
+--color-syntax-keyword: #a78bfa;
+--color-syntax-keyword-rgb: 167 139 250;
+--color-syntax-string: #bef264;
+--color-syntax-string-rgb: 190 242 100;
+--color-syntax-number: #fbbf24;
+--color-syntax-number-rgb: 251 191 36;
+--color-syntax-function: #67e8f9;
+--color-syntax-function-rgb: 103 232 249;
+--color-syntax-type: #6ee7b7;
+--color-syntax-type-rgb: 110 231 183;
+--color-syntax-tag: #f9a8d4;
+--color-syntax-tag-rgb: 249 168 212;
 --color-method-get: var(--color-primary-600);
 --color-method-get-rgb: var(--color-primary-600-rgb);
 --color-method-post: var(--color-success);
@@ -160,6 +176,10 @@
 --color-bg-muted-rgb: 248 251 254;
 --color-bg-developer: #031425;
 --color-bg-developer-rgb: 3 20 37;
+--color-bg-code: #0f172a;
+--color-bg-code-rgb: 15 23 42;
+--color-bg-scrim: #0a0f1a;
+--color-bg-scrim-rgb: 10 15 26;
 --color-text-primary: var(--color-primary-900);
 --color-text-primary-rgb: var(--color-primary-900-rgb);
 --color-text-secondary: var(--color-primary-600);
@@ -305,10 +325,15 @@
 --motion-duration-base: 200ms;
 --motion-duration-slow: 300ms;
 --motion-duration-slower: 500ms;
+--motion-duration-timeline: 1000ms;
 --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
 --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+--motion-ease-linear: cubic-bezier(0, 0, 1, 1);
+
+/* ── icon ── */
+--icon-stroke: 2;
 
 /* ── focus ── */
 --focus-ring-width: 2px;
@@ -329,8 +354,11 @@
 /* ── layout ── */
 --layout-header-height: 64px;
 --layout-header-height-compact: 56px;
+--layout-bottom-nav-height: 64px;
 --layout-max-width: 1280px;
 --layout-prose-width: 768px;
+--layout-modal-offset: 15vh;
+--layout-hero-offset: 8vh;
 --layout-breakpoint-sm: 640px;
 --layout-breakpoint-md: 768px;
 --layout-breakpoint-lg: 1024px;
@@ -347,7 +375,7 @@
 --image-page-dark: radial-gradient(circle at top left, rgba(135, 206, 235, 0.12), transparent 28%), radial-gradient(circle at top right, rgba(255, 191, 0, 0.08), transparent 20%), linear-gradient(180deg, #041d31 0%, #031425 45%, #020b14 100%);
 }
 
-
+@layer base {
   html {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -362,7 +390,7 @@
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
   }
-
+}
 
 [data-theme="portal"] {
 /* ── color ── */
@@ -421,6 +449,8 @@
 --color-bg-elevated-rgb: 15 51 72;
 --color-bg-muted: #0a1f30;
 --color-bg-muted-rgb: 10 31 48;
+--color-bg-code: #020617;
+--color-bg-code-rgb: 2 6 23;
 --color-text-primary: #f8fbfe;
 --color-text-primary-rgb: 248 251 254;
 --color-text-secondary: #87ceeb;
@@ -518,6 +548,8 @@
 --color-bg-elevated-rgb: 31 31 31;
 --color-bg-muted: #0a1f30;
 --color-bg-muted-rgb: 10 31 48;
+--color-bg-code: #020617;
+--color-bg-code-rgb: 2 6 23;
 --color-text-primary: #f5f5f5;
 --color-text-primary-rgb: 245 245 245;
 --color-text-secondary: #a3a3a3;
